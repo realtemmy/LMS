@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Library Management System</h1>
+            <p>Manage books, members, and borrowing efficiently</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('books')">All Books</button>
+            <button class="tab-button" onclick="showTab('add-book')">Add Book</button>
+            <button class="tab-button" onclick="showTab('add-member')">Add Member</button>
+            <button class="tab-button" onclick="showTab('my-books')">My Borrowed Books</button>
+        </div>
+
+        <!-- All Books Tab -->
+        <div id="books" class="tab-content active">
+            <h2 class="section-title">All Books</h2>
+
+            <div class="search-container">
+                <input type="text" id="searchBooks" class="search-input"
+                    placeholder="Search books by title or author...">
+                <button class="btn btn-primary" onclick="searchBooks()">Search</button>
+                <button class="btn btn-warning" onclick="clearSearch()">Clear</button>
+            </div>
+
+            <div id="booksGrid" class="books-grid">
+                <!-- Books will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Add Book Tab -->
+        <div id="add-book" class="tab-content">
+            <h2 class="section-title">Add New Book</h2>
+
+            <div id="addBookMessage"></div>
+
+            <form id="addBookForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookTitle">Book Title</label>
+                        <input type="text" id="bookTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">Author</label>
+                        <input type="text" id="bookAuthor" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Add Book</button>
+            </form>
+        </div>
+
+        <!-- Add Member Tab -->
+        <div id="add-member" class="tab-content">
+            <h2 class="section-title">Add New Member</h2>
+
+            <div id="addMemberMessage"></div>
+
+            <form id="addMemberForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="memberName">Full Name</label>
+                        <input type="text" id="memberName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email</label>
+                        <input type="email" id="memberEmail" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="memberPhone">Phone Number</label>
+                    <input type="tel" id="memberPhone" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add Member</button>
+            </form>
+        </div>
+
+        <!-- My Borrowed Books Tab -->
+        <div id="my-books" class="tab-content">
+            <h2 class="section-title">My Borrowed Books</h2>
+
+            <div class="user-info">
+                <div class="user-name" id="currentUserName">John Doe</div>
+                <div style="color: #7f8c8d;">Member ID: #12345</div>
+            </div>
+
+            <div id="borrowedBooksMessage"></div>
+
+            <div id="borrowedBooksList" class="borrowed-books-list">
+                <!-- Borrowed books will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    </script>
+</body>
+
+</html>
