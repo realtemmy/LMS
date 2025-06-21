@@ -26,10 +26,6 @@ class User {
     this.borrowedBooks.add(book);
     return;
   }
-  removeFromBorrowedBooks(book: Book) {
-    this.borrowedBooks.delete(book);
-    return;
-  }
 
   removeBook(book: Book): void {
     this.borrowedBooks.delete(book);
@@ -69,9 +65,12 @@ class Book {
     return true;
   }
   borrow() {
-    this.bookCount--;
-    // maybe keep track of who it was borrowed to
+    if (this.bookCount > 0) {
+      this.bookCount--;
+      this.isAvailable = this.bookCount > 0;
+    }
   }
+
   returnBook() {
     this.isAvailable = true;
     this.bookCount++;
@@ -95,6 +94,8 @@ class LMS {
     isAvailable: boolean = true,
     bookCount: number = 2
   ): void {
+    if (!name.trim()) return;
+
     const book = new Book(name, author, isAvailable, bookCount);
     // Check if book exists on books
     const bookExists = this.books.find(
@@ -105,9 +106,11 @@ class LMS {
     }
   }
 
-  addUser(name: string): void {
-    if (!this.userExists(name)) {
-      this.users.push(new User(name));
+  addUser(userName: string): void {
+    if (!userName.trim()) return;
+
+    if (!this.getUser(userName)) {
+      this.users.push(new User(userName));
     }
   }
 
@@ -123,15 +126,15 @@ class LMS {
     }
   }
 
-  getUserBorrowedBooks(userName: string): Set<Book> | undefined {
+  getUserBorrowedBooks(userName: string): Set<Book> {
     const user = this.getUser(userName);
-    return user?.getBorrowedBooks();
+    return user?.getBorrowedBooks() ?? new Set();
   }
 
   returnBook(bookName: string, userName: string): void {
     // Check if book and user exists
-    const book = this.bookExists(bookName);
-    const user = this.userExists(userName);
+    const book = this.getBook(bookName);
+    const user = this.getUser(userName);
     if (!book || !user) return;
     // // remove from book
     book.returnBook();
@@ -139,17 +142,9 @@ class LMS {
     user.removeBook(book);
   }
 
-  bookExists(name: string): Book | undefined {
-    return this.books.find((book) => book.getBookName() === name);
-  }
-
-  userExists(name: string): User | undefined {
-    return this.users.find((currentUser) => currentUser.getUserName() === name);
-  }
-
   removeUser(name: string): void {
     // Check if user exists
-    const user = this.userExists(name);
+    const user = this.getUser(name);
     if (!user) return;
     // Get and remove all the books user has borrowed;
     const borrowedBooks = user.getBorrowedBooks();
@@ -178,7 +173,7 @@ lms.addBook("Harry Porter", "JK Rowlings");
 lms.addBook("Sweet 16", "Temi Dee");
 lms.removeBook("Sweet 16");
 
-lms.removeUser("Oreoluwa")
+lms.removeUser("Oreoluwa");
 
 lms.borrowBook("Harry Porter", "Temiloluwa");
 lms.returnBook("Harry Porter", "Temiloluwa");
