@@ -15,6 +15,8 @@
             <p>Manage books, members, and borrowing efficiently</p>
         </div>
 
+        <div id="notification"></div>
+
         <div class="nav-tabs">
             <button class="tab-button active" id="tab-books">All Books</button>
             <button class="tab-button" id="tab-add-book">Add Book</button>
@@ -47,12 +49,16 @@
             <form id="addBookForm">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="bookTitle">Book Title</label>
-                        <input type="text" id="bookTitle" required>
+                        <label for="bookName">Book Name</label>
+                        <input type="text" id="bookName" required>
                     </div>
                     <div class="form-group">
                         <label for="bookAuthor">Author</label>
                         <input type="text" id="bookAuthor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCount">Book count</label>
+                        <input type="number" id="bookCount" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Add Book</button>
@@ -60,7 +66,7 @@
         </div>
 
         <!-- Add Member Tab -->
-        <div id="add-member" class="tab-content">
+        <div id="add-user" class="tab-content">
             <h2 class="section-title">Add New Member</h2>
 
             <div id="addMemberMessage"></div>
@@ -71,14 +77,6 @@
                         <label for="memberName">Full Name</label>
                         <input type="text" id="memberName" required>
                     </div>
-                    <div class="form-group">
-                        <label for="memberEmail">Email</label>
-                        <input type="email" id="memberEmail" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="memberPhone">Phone Number</label>
-                    <input type="tel" id="memberPhone" required>
                 </div>
                 <button type="submit" class="btn btn-success">Add Member</button>
             </form>
@@ -90,7 +88,7 @@
 
             <div class="user-info">
                 <div class="user-name" id="currentUserName">John Doe</div>
-                <div style="color: #7f8c8d;">Member ID: #12345</div>
+                <!-- <div style="color: #7f8c8d;">Member ID: #12345</div> -->
             </div>
 
             <div id="borrowedBooksMessage"></div>
