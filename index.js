@@ -148,6 +148,11 @@ class LMS {
         this.addBook(name, author, isAvailable, bookCount);
         document.getElementById("addBookForm").reset();
       });
+    this.searchTerm.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        this.searchBooks();
+      }
+    });
     this.addUserButton.addEventListener("submit", (e) => {
       e.preventDefault();
 
