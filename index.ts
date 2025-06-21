@@ -8,6 +8,13 @@ class User {
   getUserName(): string {
     return this.name;
   }
+  getBook(bookName: string): Book | undefined {
+    for (let book of this.borrowedBooks) {
+      if (book.getBookName() === bookName) {
+        return book;
+      }
+    }
+  }
   getBorrowedBooks(): Set<Book> {
     return this.borrowedBooks;
   }
@@ -31,6 +38,7 @@ class User {
 }
 
 class Book {
+  // Maybe use map for the books?
   private name: string;
   private author: string;
   private isAvailable: boolean;
@@ -74,6 +82,13 @@ class LMS {
   books: Book[] = [];
   users: User[] = [];
 
+  getBook(bookName: string): Book | undefined {
+    return this.books.find((bk) => bk.getBookName() === bookName);
+  }
+  getUser(userName: string): User | undefined {
+    return this.users.find((user) => user.getUserName() === userName);
+  }
+
   addBook(
     name: string,
     author: string,
@@ -90,32 +105,46 @@ class LMS {
     }
   }
 
-  borrowBook(book: Book, user: User): void {
+  addUser(name: string): void {
+    if (!this.userExists(name)) {
+      this.users.push(new User(name));
+    }
+  }
+
+  borrowBook(bookName: string, userName: string): void {
+    const book = this.getBook(bookName);
+    const user = this.getUser(userName);
+
     // First check if book is available and if user has not already borrowed the book
-    if (book.checkBookAvailability() && user.hasBook(book)) {
+    if (book?.checkBookAvailability() && user && !user.hasBook(book)) {
       // If available and user hasn't, subtract one from book count and add to list of borrowed books from user
       book.borrow();
       user.addToBorrowedBooks(book);
     }
   }
 
-  returnBook(book: string, user: string): void {
+  getUserBorrowedBooks(userName: string): Set<Book> | undefined {
+    const user = this.getUser(userName);
+    return user?.getBorrowedBooks();
+  }
+
+  returnBook(bookName: string, userName: string): void {
+    // Check if book and user exists
+    const book = this.bookExists(bookName);
+    const user = this.userExists(userName);
+    if (!book || !user) return;
     // // remove from book
-    // book.returnBook();
+    book.returnBook();
     // // remove from user
-    // user.removeBook(book);
+    user.removeBook(book);
+  }
+
+  bookExists(name: string): Book | undefined {
+    return this.books.find((book) => book.getBookName() === name);
   }
 
   userExists(name: string): User | undefined {
-    const userExists = this.users.find(
-      (currentUser) => currentUser.getUserName() === name
-    );
-    return userExists;
-  }
-  addUser(name: string): void {
-    if (!this.userExists(name)) {
-      this.users.push(new User(name));
-    }
+    return this.users.find((currentUser) => currentUser.getUserName() === name);
   }
 
   removeUser(name: string): void {
@@ -125,10 +154,34 @@ class LMS {
     // Get and remove all the books user has borrowed;
     const borrowedBooks = user.getBorrowedBooks();
     borrowedBooks.forEach((book) => this.returnBook(book.getBookName(), name));
-    // Then delete user;
+    // Then delete user
+    this.users = this.users.filter(
+      (currentUser) => currentUser.getUserName() !== name
+    );
+  }
+
+  removeBook(bookName: string) {
+    this.books = this.books.filter((book) => book.getBookName() !== bookName);
+  }
+
+  searchBook(bookName: string): Book[] {
+    return this.books.filter((book) => book.getBookName() === bookName);
   }
 }
 
-// library has users that allows borrowing and returning of books, a list of books, available or not
-// Books has the name, author and availability of a book
-// User has the details of a student: matric no and name, and the books borrowed by the user. basically user can borrow and return books
+const lms = new LMS();
+
+lms.addUser("Temiloluwa");
+lms.addUser("Oreoluwa");
+
+lms.addBook("Harry Porter", "JK Rowlings");
+lms.addBook("Sweet 16", "Temi Dee");
+lms.removeBook("Sweet 16");
+
+lms.removeUser("Oreoluwa")
+
+lms.borrowBook("Harry Porter", "Temiloluwa");
+lms.returnBook("Harry Porter", "Temiloluwa");
+// console.log(lms.getUserBorrowedBooks("Temiloluwa"));
+
+console.log(lms);
