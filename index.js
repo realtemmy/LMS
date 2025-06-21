@@ -168,7 +168,7 @@ class LMS {
       // Clear form
       this.addUserButton.reset();
     });
-    this.searchBookBtn.addEventListener("keypress", function (e) {
+    this.searchBookBtn.addEventListener("keypress",  (e) => {
       // Search on enter key
       if (e.key === "Enter") {
         this.searchBooks();
