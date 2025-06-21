@@ -60,6 +60,7 @@ class Book {
     this.bookCount++;
   }
 }
+
 class LMS {
   constructor() {
     this.books = [];
@@ -127,6 +128,13 @@ class LMS {
     document
       .getElementById("tab-my-books")
       .addEventListener("click", () => this.showTab("my-books"));
+    document
+      .getElementById("searchBook")
+      .addEventListener("click", () => this.searchBooks());
+
+    document
+      .getElementById("clearSearch")
+      .addEventListener("click", () => this.displayBooks());
 
     document
       .getElementById("addBookForm")
@@ -158,7 +166,7 @@ class LMS {
     this.searchBookBtn.addEventListener("keypress", function (e) {
       // Search on enter key
       if (e.key === "Enter") {
-        searchBooks();
+        this.searchBooks();
       }
     });
   }
@@ -183,14 +191,13 @@ class LMS {
     // Show selected tab
     document.getElementById(tabName).classList.add("active");
 
-    // Add active class to clicked button
-    event.target.classList.add("active");
-
     // Refresh content based on tab
     if (tabName === "books") {
       this.displayBooks();
     } else if (tabName === "my-books") {
-      document.getElementById("currentUserName").textContent = `Current user: ${this.user.name}` 
+      document.getElementById(
+        "currentUserName"
+      ).textContent = `Current user: ${this.user.name}`;
       this.getUserBorrowedBooks();
     }
   }
@@ -261,9 +268,9 @@ class LMS {
 
   searchBooks() {
     const searchTerm = this.searchTerm.value.toLowerCase();
-    const filteredBooks = books.filter(
+    const filteredBooks = this.books.filter(
       (book) =>
-        book.title.toLowerCase().includes(searchTerm) ||
+        book.name.toLowerCase().includes(searchTerm) ||
         book.author.toLowerCase().includes(searchTerm)
     );
     this.displayBooks(filteredBooks);
@@ -379,15 +386,13 @@ class LMS {
     const borrowedBooks = user.getBorrowedBooks();
     borrowedBooks.forEach((book) => this.returnBook(book.getBookName(), name));
     // Then delete user
-    this.users = this.users.filter(
-      (currentUser) => currentUser.getUserName() !== name
-    );
+    this.user = null;
   }
   removeBook(bookName) {
     this.books = this.books.filter((book) => book.getBookName() !== bookName);
   }
   searchBook(bookName) {
-    return this.books.filter((book) => book.getBookName() === bookName);
+    this.books = this.books.filter((book) => book.getBookName() === bookName);
   }
   showMessage(elementId, message, type) {
     const messageDiv = document.getElementById(elementId);
